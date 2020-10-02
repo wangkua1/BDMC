@@ -13,6 +13,7 @@ def hmc_trajectory(current_z, current_v, U, grad_U, epsilon, L=10):
       L: number of leap-frog steps
       current_z: current position
   """
+  # import ipdb; ipdb.set_trace()
   eps = epsilon.view(-1, 1)
   z = current_z
   v = current_v - grad_U(z).mul(eps).mul_(.5)
@@ -44,10 +45,11 @@ def accept_reject(current_z, current_v,
       U: function to compute potential energy
       K: function to compute kinetic energy
   """
-  current_Hamil = K(current_v) + U(current_z)
-  propose_Hamil = K(v) + U(z)
-
-  prob = torch.clamp_max(torch.exp(current_Hamil - propose_Hamil), 1.)
+  # import ipdb; ipdb.set_trace()
+  with torch.no_grad():
+    current_Hamil = K(current_v).detach() + U(current_z).detach()
+    propose_Hamil = K(v).detach() + U(z).detach()
+    prob = torch.clamp_max(torch.exp(current_Hamil - propose_Hamil), 1.).detach()
 
   with torch.no_grad():
     uniform_sample = torch.rand(prob.size()).cuda()

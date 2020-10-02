@@ -17,14 +17,26 @@ The given implementation performs evaluation on a variational autoencoder (VAE) 
 ## To run
 There is a pretrained VAE model (on MNIST) in the `checkpoints` folder. Executing the command
 ```bash
+python bdmc-orig.py \
+  --latent-dim 50 \
+  --batch-size 10 \
+  --n-batch 1 \
+  --chain-length 1000 \
+  --iwae-samples 10 \
+  --ckpt-path BDMC/checkpoints/model.pth
+```
+
+```bash
 python bdmc.py \
   --latent-dim 50 \
   --batch-size 10 \
   --n-batch 1 \
-  --chain-length 10000 \
+  --chain-length 1000 \
   --iwae-samples 10 \
-  --ckpt-path ./checkpoints/model.pth
+  --ckpt-path ${ROOT1}/mm/train-vae/${d}/${arch}-${lr}-${klw}-${nz}-${nh}-${nf}-${r}
 ```
+
+
 will start the forward and backwards chain of BDMC based on the model loaded from the pretrained checkpoint.
 
 ## Implementation Details
